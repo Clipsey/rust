@@ -45,20 +45,20 @@ impl Obstacle {
     fn hit_obstacle(&self, player: &Player) -> bool {
         let half_size = self.size / 2;
         let does_x_match = player.x == self.x;
-        let player_above_gap = player.y < self.gap_y - half_size;
-        let player_below_gap = player.y > self.gap_y + half_size;
+        let player_above_gap = player.y < (self.gap_y - half_size) as f32;
+        let player_below_gap = player.y > (self.gap_y + half_size) as f32;
         does_x_match && (player_above_gap || player_below_gap)
     }
 }
 
 struct Player {
     x: i32,
-    y: i32,
+    y: f32,
     velocity: f32,
 }
 
 impl Player {
-    fn new(x: i32, y: i32) -> Self {
+    fn new(x: i32, y: f32) -> Self {
         Self {
             x,
             y,
@@ -67,7 +67,7 @@ impl Player {
     }
 
     fn render(&mut self, ctx: &mut BTerm) {
-        ctx.set(0, self.y, YELLOW, BLACK, to_cp437('@'));
+        ctx.set(0, self.y as i32, YELLOW, BLACK, to_cp437('@'));
     }
 
     fn gravity_and_move(&mut self) {
@@ -75,11 +75,11 @@ impl Player {
             self.velocity += 1.00;
         }
 
-        self.y += self.velocity as i32;
+        self.y += self.velocity as f32;
         self.x += 1;
 
-        if self.y < 0 {
-            self.y = 0;
+        if self.y < 0.0 {
+            self.y = 0.0;
         }
     }
 
@@ -110,7 +110,7 @@ impl State {
     fn new() -> Self {
         Self {
             mode: GameMode::Menu,
-            player: Player::new(5, 25),
+            player: Player::new(5, 25.0),
             frame_time: 0.0,
             score: 0,
             obstacle: Obstacle::new(SCREEN_WIDTH, 0),
@@ -156,8 +156,8 @@ impl State {
             self.obstacle = Obstacle::new(self.player.x + SCREEN_WIDTH, self.score)
         }
 
-        if self.player.y > SCREEN_HEIGHT
-            || self.player.y == 0
+        if self.player.y > SCREEN_HEIGHT as f32
+            || self.player.y == 0.0
             || self.obstacle.hit_obstacle(&self.player)
         {
             self.mode = GameMode::End;
@@ -182,7 +182,7 @@ impl State {
 
     fn restart(&mut self) {
         self.mode = GameMode::Playing;
-        self.player = Player::new(5, 25);
+        self.player = Player::new(5, 25.0);
         self.frame_time = 0.0;
         self.obstacle = Obstacle::new(SCREEN_WIDTH, 0);
         self.score = 0;
