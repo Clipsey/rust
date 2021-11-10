@@ -8,6 +8,7 @@ pub fn player_input(
     #[resource] map: &Map,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] camera: &mut Camera,
+    #[resource] turn_state: &mut TurnState,
 ) {
     if let Some(key) = key {
         let delta = match key {
@@ -19,10 +20,8 @@ pub fn player_input(
         };
 
         if delta.x != 0 || delta.y != 0 {
-            let mut players = <&mut Point>::query().filter(component::<Player>());
             // let mut players = <(&mut Point, &Player)>::query();
-
-            // players.iter_mut(ecs).for_each(|(pos, _player)| {
+            let mut players = <&mut Point>::query().filter(component::<Player>());
 
             // players.iter_mut(ecs).for_each(|(pos, _player)| {
             players.iter_mut(ecs).for_each(|pos| {
@@ -30,6 +29,7 @@ pub fn player_input(
                 if map.can_enter_tile(destination) {
                     *pos = destination;
                     camera.on_player_move(destination);
+                    *turn_state = TurnState::PlayerTurn;
                 }
             });
         }
