@@ -123,12 +123,7 @@ impl State {
 
         spawn_player(&mut self.ecs, map_builder.player_start);
         spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
-        // map_builder
-        //     .rooms
-        //     .iter()
-        //     .skip(1)
-        //     .map(|r| r.center())
-        //     .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
+
         map_builder
             .monster_spawns
             .iter()
