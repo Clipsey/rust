@@ -8,7 +8,9 @@ pub struct Render {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Player;
+pub struct Player {
+    pub map_level: u32,
+}
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Enemy;
@@ -70,3 +72,26 @@ impl FieldOfView {
         }
     }
 }
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesHealing {
+    pub amount: i32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesDungeonMap;
+
+#[derive(Clone, PartialEq)]
+pub struct Carried(pub Entity);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ActivateItem {
+    pub used_by: Entity,
+    pub item: Entity,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Damage(pub i32);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Weapon;
