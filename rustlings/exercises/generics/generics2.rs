@@ -3,14 +3,15 @@
 
 // Execute `rustlings hint generics2` for hints!
 
-// I AM NOT DONE
+use std::any::Any;
+use std::fmt::Debug;
 
-struct Wrapper {
-    value: u32,
+struct Wrapper<T: Any + Debug> {
+    value: T,
 }
 
-impl Wrapper {
-    pub fn new(value: u32) -> Self {
+impl<T: Any + Debug> Wrapper<T> {
+    pub fn new(value: T) -> Self {
         Wrapper { value }
     }
 }
