@@ -1,3 +1,5 @@
+use std::num::ParseIntError;
+
 // The From trait is used for value-to-value conversions.
 // If From is implemented correctly for a type, the Into trait should work conversely.
 // You can read more about it at https://doc.rust-lang.org/std/convert/trait.From.html
@@ -33,10 +35,42 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 {
+            return Person::default();
+        }
+        let mut xs = s.split(",");
+
+        let name = match xs.next() {
+            Some(inner_name) => {
+                if inner_name.len() == 0 {
+                    return Person::default();
+                }
+                inner_name
+            }
+            None => return Person::default(),
+        };
+
+        let age = match xs.next() {
+            Some(inner_age) => {
+                let num = inner_age.parse::<usize>();
+                match num {
+                    Ok(a) => a,
+                    Err(_e) => return Person::default(),
+                }
+            }
+            None => return Person::default(),
+        };
+
+        if xs.next() != None {
+            return Person::default();
+        }
+
+        Person {
+            age,
+            name: name.to_string(),
+        }
     }
 }
 
